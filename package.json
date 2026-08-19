@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "npx --yes serve@14 out --listen 3001",
     "lint": "eslint",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "next typegen && tsc --noEmit"
   },
   "dependencies": {
     "next": "16.3.1",

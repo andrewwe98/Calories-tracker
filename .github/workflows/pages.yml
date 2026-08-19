@@ -4,7 +4,9 @@ name: Deploy Next.js site to Pages
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
+      - cursor/eatmore-calorie-tracker-a56b
   workflow_dispatch:
 
 permissions:

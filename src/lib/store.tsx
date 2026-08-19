@@ -3,10 +3,8 @@
 import {
   createContext,
   useContext,
-  useEffect,
   useMemo,
-  useReducer,
-  useState,
+  useSyncExternalStore,
   type ReactNode,
 } from "react";
 
@@ -79,7 +77,7 @@ function reducer(state: AppState, action: Action): AppState {
 }
 
 /* -------------------------------------------------------------------------- */
-/* Persistence                                                                */
+/* Reading and validating persisted state                                     */
 /* -------------------------------------------------------------------------- */
 
 const isNumber = (value: unknown): value is number =>
@@ -120,6 +118,10 @@ function parseEntry(value: unknown): Entry | null {
   };
 }
 
+export function clampCalories(value: number): number {
+  return Math.min(Math.max(Math.round(value), 800), 8000);
+}
+
 function parseGoals(value: unknown): Goals {
   if (typeof value !== "object" || value === null) return DEFAULT_GOALS;
   const raw = value as Record<string, unknown>;
@@ -130,10 +132,6 @@ function parseGoals(value: unknown): Goals {
     carbsPct: isNumber(raw.carbsPct) ? raw.carbsPct : DEFAULT_GOALS.carbsPct,
     fatPct: isNumber(raw.fatPct) ? raw.fatPct : DEFAULT_GOALS.fatPct,
   };
-}
-
-function clampCalories(value: number): number {
-  return Math.min(Math.max(Math.round(value), 800), 8000);
 }
 
 function readStoredState(): AppState | null {
@@ -160,11 +158,70 @@ function readStoredState(): AppState | null {
   }
 }
 
+function persist(state: AppState): void {
+  try {
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  } catch {
+    // Private browsing or a full quota: keep working from memory.
+  }
+}
+
 function createId(): string {
   if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
     return crypto.randomUUID();
   }
   return `entry-${Date.now().toString(36)}-${Math.round(Math.random() * 1e6).toString(36)}`;
+}
+
+/* -------------------------------------------------------------------------- */
+/* External store                                                             */
+/* -------------------------------------------------------------------------- */
+
+interface Snapshot {
+  state: AppState;
+  /** False until `localStorage` has been read; views show placeholders first. */
+  hydrated: boolean;
+}
+
+/**
+ * The log lives in an external store rather than component state so that
+ * `useSyncExternalStore` can hand React the empty server snapshot during
+ * hydration and swap in the stored data straight after, without the
+ * render-then-correct flash of reading storage in an effect.
+ */
+const SERVER_SNAPSHOT: Snapshot = { state: INITIAL_STATE, hydrated: false };
+
+let snapshot: Snapshot = SERVER_SNAPSHOT;
+const listeners = new Set<() => void>();
+
+function emit(): void {
+  for (const listener of listeners) listener();
+}
+
+function loadOnce(): void {
+  if (snapshot.hydrated || typeof window === "undefined") return;
+  snapshot = { state: readStoredState() ?? INITIAL_STATE, hydrated: true };
+  emit();
+}
+
+function subscribe(listener: () => void): () => void {
+  listeners.add(listener);
+  loadOnce();
+  return () => {
+    listeners.delete(listener);
+  };
+}
+
+const getSnapshot = (): Snapshot => snapshot;
+const getServerSnapshot = (): Snapshot => SERVER_SNAPSHOT;
+
+function dispatch(action: Action): void {
+  const nextState = reducer(snapshot.state, action);
+  if (nextState === snapshot.state) return;
+
+  snapshot = { state: nextState, hydrated: true };
+  persist(nextState);
+  emit();
 }
 
 /* -------------------------------------------------------------------------- */
@@ -181,65 +238,38 @@ export interface EatMoreActions {
   clearEverything: () => void;
 }
 
-interface EatMoreContextValue {
-  state: AppState;
-  /** False until `localStorage` has been read; UI shows placeholders until then. */
-  hydrated: boolean;
+const actions: EatMoreActions = {
+  addEntry: (input) =>
+    dispatch({ type: "addEntry", entry: { ...input, id: createId(), createdAt: Date.now() } }),
+  updateEntry: (id, patch) => dispatch({ type: "updateEntry", id, patch }),
+  deleteEntry: (id) => dispatch({ type: "deleteEntry", id }),
+  setGoals: (goals) => dispatch({ type: "setGoals", goals }),
+  setName: (name) => dispatch({ type: "setName", name }),
+  loadSampleData: () =>
+    dispatch({
+      type: "replace",
+      state: {
+        version: STATE_VERSION,
+        name: "Andrew",
+        goals: DEFAULT_GOALS,
+        entries: buildDemoEntries(),
+      },
+    }),
+  clearEverything: () => dispatch({ type: "replace", state: INITIAL_STATE }),
+};
+
+interface EatMoreContextValue extends Snapshot {
   actions: EatMoreActions;
 }
 
 const EatMoreContext = createContext<EatMoreContextValue | null>(null);
 
 export function EatMoreProvider({ children }: { children: ReactNode }) {
-  const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
-  const [hydrated, setHydrated] = useState(false);
-
-  // Reading storage during render would make the server and client markup
-  // disagree, so the real state arrives after mount.
-  useEffect(() => {
-    const stored = readStoredState();
-    if (stored) dispatch({ type: "replace", state: stored });
-    setHydrated(true);
-  }, []);
-
-  useEffect(() => {
-    if (!hydrated) return;
-    try {
-      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-    } catch {
-      // Private browsing or a full quota: keep working from memory.
-    }
-  }, [state, hydrated]);
-
-  const actions = useMemo<EatMoreActions>(
-    () => ({
-      addEntry: (input) =>
-        dispatch({
-          type: "addEntry",
-          entry: { ...input, id: createId(), createdAt: Date.now() },
-        }),
-      updateEntry: (id, patch) => dispatch({ type: "updateEntry", id, patch }),
-      deleteEntry: (id) => dispatch({ type: "deleteEntry", id }),
-      setGoals: (goals) => dispatch({ type: "setGoals", goals }),
-      setName: (name) => dispatch({ type: "setName", name }),
-      loadSampleData: () =>
-        dispatch({
-          type: "replace",
-          state: {
-            version: STATE_VERSION,
-            name: "Andrew",
-            goals: DEFAULT_GOALS,
-            entries: buildDemoEntries(),
-          },
-        }),
-      clearEverything: () => dispatch({ type: "replace", state: INITIAL_STATE }),
-    }),
-    [],
-  );
+  const current = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 
   const value = useMemo<EatMoreContextValue>(
-    () => ({ state, hydrated, actions }),
-    [state, hydrated, actions],
+    () => ({ state: current.state, hydrated: current.hydrated, actions }),
+    [current],
   );
 
   return <EatMoreContext.Provider value={value}>{children}</EatMoreContext.Provider>;
@@ -252,5 +282,3 @@ export function useEatMore(): EatMoreContextValue {
   }
   return context;
 }
-
-export { clampCalories };

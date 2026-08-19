@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="peel" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffb85c" />
+      <stop offset="55%" stop-color="#ff9f2e" />
+      <stop offset="100%" stop-color="#fa4f7c" />
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="16" fill="url(#peel)" />
+  <path
+    d="M32 20.5c4.3-6.1 11.2-8.5 16.8-6.4 6.1 2.4 8.5 9.6 6.4 17.6-2.7 10.1-11.7 20.3-23.2 26.7C20.5 52 11.5 41.8 8.8 31.7c-2.1-8 .3-15.2 6.4-17.6 5.6-2.1 12.5.3 16.8 6.4Z"
+    fill="#fffaf3"
+    transform="translate(0 -4) scale(1)"
+    opacity="0.96"
+  />
+  <path d="M32 20.5V13c0-2.8 2-5.1 4.8-5.6" stroke="#5eab22" stroke-width="4" stroke-linecap="round" fill="none" />
+</svg>

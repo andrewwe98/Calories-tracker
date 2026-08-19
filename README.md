@@ -24,7 +24,7 @@ npm install
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000). To see the app with data in
+Open [http://localhost:3001](http://localhost:3001). To see the app with data in
 it, go to **Settings → Load sample data**, which drops in three deterministic
 weeks of entries.
 

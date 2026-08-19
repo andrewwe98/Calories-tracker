@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev --port 3001",
     "build": "next build",
-    "start": "next start --port 3001",
+    "start": "npx --yes serve@14 out --listen 3001",
     "lint": "eslint",
     "typecheck": "tsc --noEmit"
   },

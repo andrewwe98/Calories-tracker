@@ -31,10 +31,32 @@ weeks of entries.
 Other scripts:
 
 ```bash
-npm run build      # production build
+npm run build      # static export into ./out
+npm run start      # serve ./out on port 3001
 npm run lint       # ESLint
 npm run typecheck  # tsc --noEmit
 ```
+
+## GitHub Actions
+
+Two workflows live under `.github/workflows/`:
+
+| Workflow | When | What |
+| --- | --- | --- |
+| [CI](.github/workflows/ci.yml) | Every pull request and every push to `main` | `lint`, `typecheck`, and `build` |
+| [Deploy Next.js site to Pages](.github/workflows/pages.yml) | Push to `main`, or run it by hand | Static export → GitHub Pages |
+
+The Pages job follows the [official Next.js GitHub Pages template](https://github.com/nextjs/deploy-github-pages). After the first successful run the preview is:
+
+**https://andrewwe98.github.io/Calories-tracker/**
+
+GitHub will not publish that URL until Pages is pointed at Actions. Once:
+
+1. Open the repo **Settings → Pages**
+2. Under **Build and deployment → Source**, choose **GitHub Actions**
+3. Merge this branch (or run **Deploy Next.js site to Pages** from the Actions tab)
+
+`PAGES_BASE_PATH` is injected at build time so assets resolve under `/Calories-tracker/`. Local `npm run dev` still serves at `/`.
 
 ## Routes
 

@@ -98,7 +98,7 @@ export function Sheet({ open, onClose, title, description, children }: SheetProp
         aria-labelledby={titleId}
         aria-describedby={description ? descriptionId : undefined}
         tabIndex={-1}
-        className="glass relative z-10 max-h-[92vh] w-full animate-sheet-up overflow-y-auto rounded-t-3xl border border-hairline px-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-5 sm:max-w-lg sm:rounded-3xl sm:pb-6"
+        className="glass-strong relative z-10 max-h-[92vh] w-full animate-sheet-up overflow-y-auto rounded-t-3xl border border-hairline px-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-5 sm:max-w-lg sm:rounded-3xl sm:pb-6"
       >
         <div className="mb-4 flex items-start justify-between gap-4">
           <div className="min-w-0">

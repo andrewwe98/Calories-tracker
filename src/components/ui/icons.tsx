@@ -96,8 +96,7 @@ export function IconTrash({ className }: IconProps) {
 export function IconFlame({ className }: IconProps) {
   return (
     <svg {...base} className={className}>
-      <path d="M12 3s4 3.6 4 8a4 4 0 0 1-8 0c0-1.4.5-2.4 1-3 0 1.4.8 2.2 1.6 2.2.9 0 1.4-.8 1.4-2 0-1.8-.7-3.6-2-5.2" />
-      <path d="M8 12a6 6 0 0 0 8 8.2A6.5 6.5 0 0 1 6 15c0-1 .3-2 .8-2.8" />
+      <path d="M12.5 3c2.8 2.6 5 5.6 5 9a5.5 5.5 0 0 1-11 0c0-2 .9-3.7 2.4-5.2.2 1.6 1 2.6 2 2.6 1.1 0 1.8-1 1.8-2.4 0-1.4-.4-2.8-.2-4Z" />
     </svg>
   );
 }

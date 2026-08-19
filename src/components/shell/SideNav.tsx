@@ -22,7 +22,7 @@ export function SideNav({ onAdd }: { onAdd: () => void }) {
   const pathname = usePathname();
 
   return (
-    <aside className="glass sticky top-0 hidden h-dvh w-64 shrink-0 flex-col border-r border-hairline px-4 py-5 lg:flex">
+    <aside className="glass-strong sticky top-0 hidden h-dvh w-64 shrink-0 flex-col border-r border-hairline px-4 py-5 lg:flex">
       <Link href="/" className="mb-7 rounded-2xl px-1 py-1">
         <Logo />
       </Link>

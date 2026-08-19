@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, type FormEvent } from "react";
 
 import { FoodPicker } from "@/components/log/FoodPicker";
 import { Button } from "@/components/ui/Button";
@@ -85,7 +85,7 @@ export function AddEntryForm({
     setServingsText(formatServings(next));
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!food || servings <= 0) return;
 
@@ -204,7 +204,7 @@ export function AddEntryForm({
         </div>
       )}
 
-      <div className="sticky bottom-0 -mx-5 border-t border-hairline bg-surface-solid/85 px-5 pb-1 pt-3 backdrop-blur-md">
+      <div className="sticky bottom-0 -mx-5 border-t border-hairline bg-surface-solid/95 px-5 pb-1 pt-3 backdrop-blur-md">
         <div className="flex items-end justify-between gap-3">
           <div>
             <p className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-ink-muted">

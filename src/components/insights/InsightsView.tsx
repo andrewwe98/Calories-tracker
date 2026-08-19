@@ -85,14 +85,14 @@ export function InsightsView() {
           accent="mango"
           label="Daily average"
           value={formatKcal(summary.average)}
-          hint="kcal per logged day"
+          hint="per logged day"
         />
         <StatCard
           emoji="🎯"
           accent="kiwi"
           label="On target"
           value={`${summary.onTargetDays}/${summary.daysLogged}`}
-          hint="logged days near goal"
+          hint="days near goal"
         />
         <StatCard
           emoji="🔺"

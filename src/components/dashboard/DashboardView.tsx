@@ -113,14 +113,14 @@ export function DashboardView() {
           accent="grape"
           label="7-day avg"
           value={formatKcal(summary.average)}
-          hint="kcal per logged day"
+          hint="per logged day"
         />
         <StatCard
           emoji="🎯"
           accent="kiwi"
           label="On target"
           value={`${summary.onTargetDays}/7`}
-          hint="within 10% of goal"
+          hint="close to goal"
         />
         <StatCard
           emoji="🍽️"

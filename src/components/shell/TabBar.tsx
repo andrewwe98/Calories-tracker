@@ -18,7 +18,7 @@ export function TabBar({ onAdd }: { onAdd: () => void }) {
   return (
     <nav
       aria-label="Main"
-      className="glass fixed inset-x-0 bottom-0 z-40 grid grid-cols-5 items-center border-t border-hairline px-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] pt-2 lg:hidden"
+      className="glass-strong fixed inset-x-0 bottom-0 z-40 grid grid-cols-5 items-center border-t border-hairline px-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] pt-2 lg:hidden"
     >
       <Tab item={first} pathname={pathname} />
       <Tab item={second} pathname={pathname} />

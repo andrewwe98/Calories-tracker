@@ -40,10 +40,12 @@ export function DiaryView() {
           </h1>
           <p className="text-sm text-ink-muted">Every bite, meal by meal.</p>
         </div>
-        <Button onClick={() => openAdd({ dateKey })} className="hidden sm:inline-flex">
-          <IconPlus className="size-5" />
-          Log food
-        </Button>
+        <div className="hidden sm:block">
+          <Button onClick={() => openAdd({ dateKey })}>
+            <IconPlus className="size-5" />
+            Log food
+          </Button>
+        </div>
       </header>
 
       <DayPicker dateKey={dateKey} onChange={setDateKey} />

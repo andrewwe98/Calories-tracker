@@ -43,12 +43,12 @@ const FRUIT: FruitPlacement[] = [
   { Fruit: Strawberry, position: "right-2 top-[9%] w-20 sm:w-24", animation: "animate-float-b", rotate: 12, delay: "-4s" },
   { Fruit: KiwiSlice, position: "left-[6%] bottom-[10%] w-24 sm:w-32", animation: "animate-float-c", rotate: 8, delay: "-9s" },
   { Fruit: WatermelonWedge, position: "-right-8 bottom-[16%] w-32 sm:w-40", animation: "animate-float-a", rotate: -10, delay: "-6s" },
-  { Fruit: Banana, position: "left-[24%] -top-8 hidden w-28 lg:block", animation: "animate-float-b", rotate: 20, delay: "-12s" },
+  { Fruit: Banana, position: "left-[26%] -top-16 hidden w-28 lg:block", animation: "animate-float-b", rotate: 20, delay: "-12s" },
   { Fruit: Blueberries, position: "right-[20%] -bottom-6 hidden w-24 md:block", animation: "animate-float-c", rotate: -6, delay: "-3s" },
   { Fruit: Cherries, position: "-left-6 top-[46%] hidden w-24 md:block", animation: "animate-float-b", rotate: 6, delay: "-15s" },
   { Fruit: GrapeBunch, position: "right-[7%] top-[38%] hidden w-24 lg:block", animation: "animate-float-a", rotate: -12, delay: "-8s" },
   { Fruit: Lemon, position: "left-[42%] bottom-[3%] hidden w-20 lg:block", animation: "animate-float-c", rotate: 24, delay: "-18s" },
-  { Fruit: Pineapple, position: "right-[32%] top-[3%] hidden w-24 xl:block", animation: "animate-float-b", rotate: -8, delay: "-11s" },
+  { Fruit: Pineapple, position: "right-[30%] -top-10 hidden w-24 xl:block", animation: "animate-float-b", rotate: -8, delay: "-11s" },
 ];
 
 export function FruitBackground() {

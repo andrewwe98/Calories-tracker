@@ -70,7 +70,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           key={toast.id}
           role="status"
           aria-live="polite"
-          className="glass fixed bottom-28 left-1/2 z-50 flex max-w-[calc(100vw-2rem)] -translate-x-1/2 animate-rise items-center gap-2 rounded-full border border-hairline px-4 py-2.5 text-sm font-semibold text-ink lg:bottom-8"
+          className="glass-strong fixed bottom-28 left-1/2 z-50 flex max-w-[calc(100vw-2rem)] -translate-x-1/2 animate-rise items-center gap-2 rounded-full border border-hairline px-4 py-2.5 text-sm font-semibold text-ink lg:bottom-8"
         >
           <span className="grid size-5 shrink-0 place-items-center rounded-full bg-kiwi-400 text-white">
             <IconCheck className="size-3.5" />
